@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Your Mac's IP address
 const API_BASE_URL = "https://dairy.productionhouse.store/api/";
@@ -23,8 +23,7 @@ api.interceptors.request.use(
         console.log(`📤 API Request: ${config.method?.toUpperCase()} ${fullUrl}`);
 
         try {
-            // const token = await AsyncStorage.getItem('token');
-            const token = '';
+            const token = await AsyncStorage.getItem('token');
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
                 console.log('🔐 Token attached to request');

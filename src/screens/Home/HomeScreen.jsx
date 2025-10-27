@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, FlatList, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Image, FlatList } from 'react-native'
 import React from 'react'
 import HomeHeader from '../../components/HomeHeader/HomeHeader'
 import Footer from '../../components/Footer/Footer'
@@ -34,13 +34,33 @@ const HomeScreen = () => {
         { id: '24', name: 'Mike', age: '25', city: 'Tokyo' },
     ]
 
-    const TableHeader = () => (
-        <View style={styles.tableHeader}>
-            <Text style={[styles.columnHeader, styles.column1]}>Name</Text>
-            <Text style={[styles.columnHeader, styles.column2]}>Age</Text>
-            <Text style={[styles.columnHeader, styles.column3]}>City</Text>
+    // Banner Component
+    const BannerSection = () => (
+        <View style={styles.banner}>
+            <Image
+                source={require('../../image/Banner/HeroBgBanner.png')}
+                style={styles.bannerImage}
+            />
         </View>
     );
+
+    // Table Header Component
+    const TableHeader = () => (
+        <View style={styles.tableHeaderWrapper}>
+            <Text style={styles.tableTitle}>
+                Milk <Text style={styles.tableTitleLight}>
+                    Collection Table <AntDesign name='table' size={20} />
+                </Text>
+            </Text>
+            <View style={styles.tableHeader}>
+                <Text style={[styles.columnHeader, styles.column1]}>Name</Text>
+                <Text style={[styles.columnHeader, styles.column2]}>Age</Text>
+                <Text style={[styles.columnHeader, styles.column3]}>City</Text>
+            </View>
+        </View>
+    );
+
+    // Table Row Component
     const TableRow = ({ item }) => (
         <View style={styles.tableRow}>
             <Text style={[styles.columnRowTxt, styles.column1]}>{item.name}</Text>
@@ -50,101 +70,97 @@ const HomeScreen = () => {
     );
 
     return (
-        <>
-            <View style={{ flex: 1 }}>
-                <HomeHeader />
-                <ScrollView style={styles.container}>
-                    {/* Banner Section Start */}
-                    <View style={styles.banner}>
-                        <Image source={require('../../image/Banner/HeroBgBanner.png')} style={{
-                            width: '100%', height: '100%', borderRadius: screenWidth * 2,
-                        }} />
-                    </View>
-                    {/* Banner Section End */}
-
-                    {/* Milk Collection Table start */}
-                    <View style={styles.milkCollectionTable}>
-                        <Text style={{ textAlign: 'center', fontWeight: '500', fontSize: RFValue(14), color: '#111C43', padding: screenHeight * 0.7 }}>Milk <Text style={{
-                            textAlign: 'center', fontWeight: '400', fontSize: RFValue(14),
-                        }}>Collection Table <AntDesign name='table' size={20} />
-                        </Text>
-                        </Text>
-
-                        {/* Table */}
-                        <TableHeader />
-                        <FlatList
-                            data={tableData}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => <TableRow item={item}
-
-                            />}
-                        />
-                    </View>
-                    {/* Milk Collection Table end */}
-
-                </ScrollView>
-                <Footer />
-
-
+        <View style={{ flex: 1 }}>
+            <HomeHeader />
+            <View style={styles.container}>
+                <FlatList
+                    data={tableData}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <TableRow item={item} />}
+                    // Banner at top
+                    ListHeaderComponent={
+                        <>
+                            <BannerSection />
+                            <TableHeader />
+                        </>
+                    }
+                    // Footer at bottom
+                    ListFooterComponent={<Footer />}
+                    // Styling
+                    contentContainerStyle={styles.flatListContent}
+                    showsVerticalScrollIndicator={false}
+                />
             </View>
-        </>
-    )
-}
+        </View>
+    );
+};
 
-export default HomeScreen
+export default HomeScreen;
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            // flex: 1,
-            // borderWidth: 2,
-            // borderColor: 'red'
-
-        },
-        banner: {
-            width: '98%',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            padding: screenHeight * 0.5,
-            height: screenHeight * 25,
-            // borderBottomColor: '#cfcdcdff',
-            // borderBottomWidth: 1,
-            // borderRadius: screenWidth * 2,
-        },
-        milkCollectionTable: {
-            width: '100%',
-            padding: screenWidth * 3
-        },
-        tableHeader: {
-            flexDirection: 'row',
-            backgroundColor: '#111C43',
-            paddingVertical: 12,
-            paddingHorizontal: 8,
-            color: 'white'
-        },
-        tableRow: {
-            flexDirection: 'row',
-            paddingVertical: 12,
-            paddingHorizontal: 8,
-            borderBottomWidth: 1,
-            borderBottomColor: '#ddd',
-        },
-        columnHeader: {
-            color: '#fff',
-            fontWeight: 'bold',
-            fontSize: 14,
-        }, columnRowTxt: {
-            fontSize: 14,
-            color: '#333',
-        },
-        column1: {
-            width: '40%',
-        },
-        column2: {
-            width: '20%',
-        },
-        column3: {
-            width: '40%',
-        },
-    }
-)
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    flatListContent: {
+        paddingBottom: 20,
+    },
+    banner: {
+        width: '98%',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        padding: screenHeight * 0.5,
+        height: screenHeight * 25,
+    },
+    bannerImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: screenWidth * 2,
+    },
+    tableHeaderWrapper: {
+        width: '100%',
+        padding: screenWidth * 3,
+    },
+    tableTitle: {
+        textAlign: 'center',
+        fontWeight: '500',
+        fontSize: RFValue(14),
+        color: '#111C43',
+        paddingBottom: screenHeight * 0.7,
+    },
+    tableTitleLight: {
+        fontWeight: '400',
+        fontSize: RFValue(14),
+    },
+    tableHeader: {
+        flexDirection: 'row',
+        backgroundColor: '#111C43',
+        paddingVertical: 12,
+        paddingHorizontal: 8,
+    },
+    tableRow: {
+        flexDirection: 'row',
+        paddingVertical: 12,
+        paddingHorizontal: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+        marginHorizontal: screenWidth * 3,
+    },
+    columnHeader: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    columnRowTxt: {
+        fontSize: 14,
+        color: '#333',
+    },
+    column1: {
+        width: '40%',
+    },
+    column2: {
+        width: '20%',
+    },
+    column3: {
+        width: '40%',
+    },
+});

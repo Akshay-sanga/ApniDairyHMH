@@ -5,6 +5,7 @@ import { screenHeight, screenWidth } from '../../utils/context';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomDropdown from '../../components/CustomDropdown/CustomDropdown';
+import { set } from '../../utils/storage';
 
 import adminStore from '../../Zustand/stores/adminStore';
 
@@ -58,15 +59,14 @@ export default function RegisterScreen() {
 
         try {
             const response = await registerUser(userData);
-            console.log('User registered successfully:', response);
+            console.log('response registered successfully:', response);
+            console.log('token registered successfully:', response.data.token);
 
             if (response.status) {
-                Alert.alert('Success', response.message, [
-                    {
-                        text: 'OK',
-                        onPress: () => navigation.navigate('HomeScreen')
-                    }
-                ]);
+                set('token', response.data.token)
+                set('user', response.data.user)
+                navigation.replace('HomeScreen');
+
             } else {
                 Alert.alert('Error', response.message);
             }

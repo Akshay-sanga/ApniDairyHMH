@@ -92,7 +92,7 @@ const adminStore = create((set, get) => ({
                 return {
                     status: true,
                     message: response.data.message,
-                    data: response.data,
+                    data: response.data.data,
                 };
             } else {
                 set({ loading: false });
