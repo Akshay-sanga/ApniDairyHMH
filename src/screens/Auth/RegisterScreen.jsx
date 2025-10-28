@@ -1,6 +1,6 @@
 import { StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { screenHeight, screenWidth } from '../../utils/context';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,11 +11,11 @@ import adminStore from '../../Zustand/stores/adminStore';
 
 export default function RegisterScreen() {
     const navigation = useNavigation();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [mobile, setMobile] = useState('');
-    const [accountNo, setAccountNo] = useState('');
+    const [name, setName] = useState('ak');
+    const [email, setEmail] = useState('ak@gmail.com');
+    const [password, setPassword] = useState('123456');
+    const [mobile, setMobile] = useState('8360877749');
+    const [accountNo, setAccountNo] = useState('146');
 
     const {
         adminList,
@@ -41,8 +41,44 @@ export default function RegisterScreen() {
         console.log('Selected Admin:', item);
     };
 
+    // const handleSubmit = async () => {
+    //     // Validation
+    //     if (!name || !email || !password || !mobile || !accountNo || !selectedAdminId) {
+    //         Alert.alert('Error', 'All fields are required');
+    //         return;
+    //     }
+
+    //     const userData = {
+    //         name,
+    //         email,
+    //         password,
+    //         mobile,
+    //         accountNo,
+    //         selectedAdminId
+    //     };
+
+    //     try {
+    //         const response = await registerUser(userData);
+    //         console.log('response registered successfully:', response);
+    //         console.log('token registered successfully:', response.data.token);
+
+    //         if (response.status) {
+    //             set('token', response.data.token)
+    //             set('user', response.data.user)
+    //             navigation.replace('HomeScreen');
+
+    //         } else {
+    //             Alert.alert('Error', response.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error registering user:', error);
+    //         Alert.alert('Error', 'Failed to register user. Please try again.');
+    //     }
+    // };
+
+
+
     const handleSubmit = async () => {
-        // Validation
         if (!name || !email || !password || !mobile || !accountNo || !selectedAdminId) {
             Alert.alert('Error', 'All fields are required');
             return;
@@ -59,23 +95,30 @@ export default function RegisterScreen() {
 
         try {
             const response = await registerUser(userData);
-            console.log('response registered successfully:', response);
-            console.log('token registered successfully:', response.data.token);
+            console.log('Registration response:', response);
 
             if (response.status) {
-                set('token', response.data.token)
-                set('user', response.data.user)
-                navigation.replace('HomeScreen');
+                // Save token and user
+                await set('token', response.data.token);
+                await set('user', response.data.user);
 
+                console.log('✅ Token saved, navigating to Splash');
+
+                // Navigate to Splash - it will auto-redirect to AuthNavigation
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: 'Splash' }],
+                    })
+                );
             } else {
-                Alert.alert('Error', response.message);
+                Alert.alert('Error', response.message || 'Registration failed');
             }
         } catch (error) {
             console.error('Error registering user:', error);
             Alert.alert('Error', 'Failed to register user. Please try again.');
         }
     };
-
     return (
         <SafeAreaView style={styles.container} edges={['bottom', 'right', 'left']}>
             <StatusBar

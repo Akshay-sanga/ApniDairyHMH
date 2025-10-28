@@ -6,7 +6,7 @@ import { screenHeight, screenWidth } from '../../utils/context'
 import { RFValue } from 'react-native-responsive-fontsize'
 import AntDesign from '@react-native-vector-icons/ant-design'
 
-const HomeScreen = () => {
+const GuestHomeScreen = () => {
     const tableData = [
         { id: '1', name: 'John', age: '28', city: 'New York' },
         { id: '2', name: 'Sarah', age: '32', city: 'London' },
@@ -84,7 +84,8 @@ const HomeScreen = () => {
                             <TableHeader />
                         </>
                     }
-
+                    // Footer at bottom
+                    ListFooterComponent={<Footer />}
                     // Styling
                     contentContainerStyle={styles.flatListContent}
                     showsVerticalScrollIndicator={false}
@@ -94,7 +95,7 @@ const HomeScreen = () => {
     );
 };
 
-export default HomeScreen;
+export default GuestHomeScreen;
 
 const styles = StyleSheet.create({
     container: {

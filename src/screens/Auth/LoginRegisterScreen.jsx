@@ -37,9 +37,11 @@ const LoginRegisterScreen = () => {
                         <Text style={styles.loginBtnText}>LOG IN NOW</Text>
                     </TouchableOpacity>
 
-                    <View style={{ position: 'absolute', bottom: screenHeight * 5, justifyContent: 'center', alignSelf: 'center' }}>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('GuestHomeScreen')
+                    }} style={{ position: 'absolute', bottom: screenHeight * 5, justifyContent: 'center', alignSelf: 'center' }}>
                         <Text style={{ fontSize: RFValue(10), color: 'white', fontWeight: '700' }}>Guest Login</Text>
-                    </View>
+                    </TouchableOpacity>
 
 
 
